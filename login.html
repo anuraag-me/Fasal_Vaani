@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FasalVaani - Farmer Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+    body{
+      background-image: url('Images/fasal_vaani_bg.webp');
+      background-position: center top; /* FIXED - drops photo lower, logo not cut */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-color: #2E5E36;
+      height:100vh;display:flex;justify-content:center;align-items:center;position:relative
+    }
+    body::before{content:'';position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,0.10),rgba(0,0,0,0.25));z-index:0}
+    .box{position:relative;z-index:1;background:rgba(255,255,255,0.96);backdrop-filter:blur(10px);padding:36px 32px;border-radius:18px;width:360px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.2)}
+    .logo{font-family:'Cinzel',serif;color:#2E5E36;font-size:22px;font-weight:600}
+    .subtitle{font-size:14px;color:#333;margin:5px 0 20px}
+    input{width:100%;padding:12px 14px;margin:8px 0;border:1px solid #E0E0E0;border-radius:10px;outline:none;font-size:13px}
+    button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:10px;cursor:pointer;font-weight:600}
+    #signup-btn{background:white;border:1px solid #ddd}
+    #login-btn{background:#3A7342;color:white}
+  </style>
+</head>
+<body>
+<div class="box">
+  <div class="logo">Fasal Vaani</div><div class="subtitle">Farmer Login</div>
+  <input id="username" placeholder="Username e.g. ramesh123">
+  <input id="password" type="password" placeholder="Password (min 6)">
+  <button id="signup-btn">Create New Account</button>
+  <button id="login-btn">Login</button>
+  <p id="error" style="color:#C62828;font-size:12px;margin-top:12px;"></p>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = { 
+    apiKey: "AIzaSyDHq1eFf1nIPqqePf-tlzRcxJh_K7hCUIc",
+    authDomain: "fasal-vaani.firebaseapp.com",
+    projectId: "fasal-vaani",
+    storageBucket: "fasal-vaani.firebasestorage.app",
+    messagingSenderId: "748246521246",
+    appId: "1:748246521246:web:3a26da8a6bdfd84c68f28f"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const toEmail = (u) => u.trim().toLowerCase() + "@fasalvaani.farm";
+
+  document.getElementById('signup-btn').onclick = async () => {
+    const u = document.getElementById('username').value.trim(); 
+    const p = document.getElementById('password').value;
+    if(u.length<3){ document.getElementById('error').innerText="Username min 3 chars"; return; }
+    try{
+      const cred = await createUserWithEmailAndPassword(auth, toEmail(u), p);
+      await setDoc(doc(db, "farmers", cred.user.uid), {
+        username: u,
+        fullName: "",
+        state: "",
+        city: "",
+        createdAt: new Date()
+      });
+      alert("Account created! Now Login");
+    }catch(e){ document.getElementById('error').innerText = e.message; }
+  };
+
+  document.getElementById('login-btn').onclick = async () => {
+    const u = document.getElementById('username').value.trim();
+    try{
+      await signInWithEmailAndPassword(auth, toEmail(u), document.getElementById('password').value);
+      window.location.href = "index.html";
+    }catch(e){ document.getElementById('error').innerText="Wrong username/password"; }
+  };
+</script>
+</body>
+</html>

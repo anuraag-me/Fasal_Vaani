@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FasalVaani - Smart Crop & Soil Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #account .account-card{background:#fff;max-width:650px;margin:20px auto;padding:25px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.08)}
+        #account .info-box{background:#F4F7F4;padding:12px;border-radius:10px;font-size:13px;line-height:1.8;margin-bottom:15px}
+        #account input, #account select{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:6px;outline:none;font-size:14px}
+        #account input:focus, #account select:focus{border-color:#3A7342}
+        /* DESIGNER ABOUT ME */
+        #about{background:#F9FDF8;min-height:100vh;padding-bottom:40px}
+        .about-wrapper{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.2fr 0.8fr;gap:40px;align-items:start;padding:20px}
+        .about-left h1{font-family:Cinzel;color:#2E5E36;font-size:32px;margin-bottom:8px}
+        .about-left h2{font-family:Playfair Display;font-size:22px;color:#1A1A1A;margin:28px 0 12px 0}
+        .about-left p{font-size:14.5px;line-height:1.8;color:#444;margin-bottom:12px}
+        .about-badge{display:inline-block;background:#E8F5E9;color:#2E5E36;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:15px}
+        .connect-box{background:white;padding:16px 18px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.05);display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+        .connect-link{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:500;transition:0.2s}
+        .connect-link.linkedin{background:#0A66C2;color:white}
+        .connect-link.github{background:#24292f;color:white}
+        .connect-link.gmail{background:#EA4335;color:white}
+        .connect-link:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,0.15)}
+        .about-photo-wrap{position:relative;display:flex;justify-content:center}
+        .photo-blob{position:absolute;top:20px;right:10px;width:320px;height:420px;background:linear-gradient(135deg,#A5D6A7,#3A7342);border-radius:30px 70px 30px 70px;opacity:0.15;z-index:0}
+        .about-photo{width:320px;height:420px;object-fit:cover;border-radius:28px 75px 28px 75px;box-shadow:0 20px 40px rgba(46,94,54,0.25);border:4px solid white;position:relative;z-index:1;transition:0.3s}
+        .about-photo:hover{transform:rotate(-1deg) scale(1.02)}
+        .feature-card{background:white;padding:16px;border-radius:12px;border-left:4px solid #3A7342;box-shadow:0 4px 12px rgba(0,0,0,0.04);margin-bottom:12px}
+        .feature-card h4{font-size:15px;color:#2E5E36;margin-bottom:6px}
+        .feature-card p{font-size:13px;color:#555;line-height:1.6;margin:0}
+        @media(max-width:900px){
+            .about-wrapper{grid-template-columns:1fr;gap:25px}
+            .about-photo-wrap{order:-1}
+            .about-photo{width:260px;height:340px}
+            .photo-blob{width:260px;height:340px;right:50%;transform:translateX(50%)}
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo-box"><i class="fa-solid fa-seedling"></i></div>
+        <ul class="nav-links">
+            <li class="active" onclick="switchTab('leaf-analyzer')" title="Leaf Analyzer"><img src="Images/leaf_icon.png" class="custom-sidebar-icon" alt="Leaf"></li>
+            <li onclick="switchTab('soil-analyzer')" title="Soil Analyzer"><img src="Images/soil_icon.png" class="custom-sidebar-icon" alt="Soil"></li>
+            <li onclick="switchTab('fasal-guru')" title="Fasal Guru"><img src="Images/chat_icon.png" class="custom-sidebar-icon" alt="Chat"></li>
+            <li onclick="switchTab('account')" title="Account Info"><img src="Images/user_icon.png" class="custom-sidebar-icon" alt="User"></li>
+            <li onclick="switchTab('about')" title="About Us"><img src="Images/team_icon.png" class="custom-sidebar-icon" alt="Team"></li>
+        </ul>
+        <div class="custom-translate-wrapper">
+            <i class="fa-solid fa-language" style="margin-bottom: 5px;"></i>
+            <select id="custom-lang-select" onchange="changeLanguage(this.value)">
+                <option value="en">EN</option><option value="hi">HI</option><option value="bn">BN</option>
+            </select>
+        </div>
+        <div id="google_translate_element" style="display:none;"></div>
+    </nav>
+    <main class="content">
+        <section id="leaf-analyzer" class="tab-content active home-wallpaper">
+            <div class="global-branding"><h1 class="brand-title-left">Fasal Vaani</h1><p class="brand-tagline-left">Empowering farmers through early disease detection & soil intelligence.</p></div>
+            <header class="page-header"><h2 class="page-title">Leaf Analyzer</h2><p class="page-subtitle">Upload the photo of the leaf to identify the problem.</p></header>
+            <div class="input-group" style="max-width: 650px; margin: 0 auto 15px auto;"><select id="leaf-crop-select" class="crop-dropdown"><option value="">-- Select Plant, Fruit, or Flower Name --</option></select></div>
+            <div class="card compact-upload-card" style="max-width: 650px; margin: 0 auto 30px auto; padding: 15px;">
+                <div class="upload-zone-inner" id="leaf-upload-zone" style="padding: 15px; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                        <div class="upload-icon-circle" style="width: 40px; height: 40px; font-size: 16px; margin: 0;"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                        <div class="upload-text" style="text-align: left;"><h3 style="font-size: 14px; margin-bottom: 2px;">Upload a leaf photo</h3><p style="font-size: 12px; margin: 0;">or <label for="leaf-upload" class="browse-link">browse</label> · JPG/PNG, up to 10MB</p><input type="file" id="leaf-upload" accept="image/jpeg, image/png" onchange="previewImage(event)" style="display: none;"></div>
+                    </div>
+                </div>
+                <button class="primary-btn full-width" style="margin-top: 10px; padding: 10px; font-size: 14px;" onclick="analyzeLeaf()">Analyze your Leaf</button>
+            </div>
+            <div id="leaf-results" class="results-grid hidden" style="max-width: 900px; margin: 0 auto;">
+                <div class="card text-card"><h3>Problem Description</h3><div style="margin-bottom: 15px;"><img id="leaf-preview" src="" alt="Uploaded Leaf" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; display: none;"></div><ul id="out-leaf-condition"><li>Waiting for AI analysis...</li></ul></div>
+                <div class="card text-card"><h3>Cure Advises</h3><ul id="out-leaf-cure"><li>Waiting for AI analysis...</li></ul></div>
+                <div class="button-row"><button class="primary-btn" style="background-color: #1565C0;" onclick="downloadPDF('leaf')"><i class="fa-solid fa-file-pdf"></i> Download PDF Report</button></div>
+            </div>
+        </section>
+        <section id="soil-analyzer" class="tab-content soil-wallpaper">
+            <div class="global-branding"><h1 class="brand-title-left">Fasal Vaani</h1><p class="brand-tagline-left">Empowering farmers through early disease detection & soil intelligence.</p></div>
+            <header class="page-header"><h2 class="page-title">Soil Analyzer</h2><p class="page-subtitle">Enter your soil test values for instant organic & chemical prescriptions.</p></header>
+            <div class="input-group" style="max-width: 750px; margin: 0 auto 15px auto;"><select id="soil-crop-select" class="crop-dropdown"><option value="">-- Select Target Crop Type --</option></select></div>
+            <div class="soil-form-container card" style="max-width: 750px; margin: 0 auto; padding: 20px;">
+                <div class="input-grid">
+                    <div class="input-group"><label>Nitrogen (N)</label><div class="input-wrapper"><input type="number" id="soil-n" placeholder="280"><span class="unit">kg/ha</span></div></div>
+                    <div class="input-group"><label>Phosphorus (P)</label><div class="input-wrapper"><input type="number" id="soil-p" placeholder="18"><span class="unit">kg/ha</span></div></div>
+                    <div class="input-group"><label>Potassium (K)</label><div class="input-wrapper"><input type="number" id="soil-k" placeholder="210"><span class="unit">kg/ha</span></div></div>
+                    <div class="input-group"><label>pH Level</label><div class="input-wrapper"><input type="number" id="soil-ph" step="0.1" placeholder="6.5"></div></div>
+                    <div class="input-group"><label>Elec. Cond. (EC)</label><div class="input-wrapper"><input type="number" id="soil-ec" step="0.1" placeholder="0.6"><span class="unit">dS/m</span></div></div>
+                    <div class="input-group"><label>Organic Carbon (OC)</label><div class="input-wrapper"><input type="number" id="soil-oc" step="0.1" placeholder="0.7"><span class="unit">%</span></div></div>
+                    <div class="input-group"><label>Sulphur (S)</label><div class="input-wrapper"><input type="number" id="soil-s" placeholder="12"><span class="unit">ppm</span></div></div>
+                    <div class="input-group"><label>Zinc (Zn)</label><div class="input-wrapper"><input type="number" id="soil-zn" step="0.1" placeholder="0.8"><span class="unit">ppm</span></div></div>
+                    <div class="input-group"><label>Iron (Fe)</label><div class="input-wrapper"><input type="number" id="soil-fe" placeholder="6"><span class="unit">ppm</span></div></div>
+                    <div class="input-group"><label>Copper (Cu)</label><div class="input-wrapper"><input type="number" id="soil-cu" step="0.1" placeholder="1.2"><span class="unit">ppm</span></div></div>
+                    <div class="input-group"><label>Manganese (Mn)</label><div class="input-wrapper"><input type="number" id="soil-mn" placeholder="4"><span class="unit">ppm</span></div></div>
+                    <div class="input-group"><label>Boron (B)</label><div class="input-wrapper"><input type="number" id="soil-b" step="0.1" placeholder="0.5"><span class="unit">ppm</span></div></div>
+                </div>
+                <button class="primary-btn full-width soil-btn" style="padding: 14px; font-size: 15px;" onclick="analyzeSoil()">Analyze your Soil</button>
+            </div>
+            <div id="soil-results" class="results-grid hidden" style="max-width: 900px; margin: 30px auto 0 auto;">
+                <div class="card text-card"><h3>Problem Description</h3><ul id="out-soil-condition"><li>Waiting for AI analysis...</li></ul></div>
+                <div class="card text-card"><h3>Cure Advises</h3><ul id="out-soil-cure"><li>Waiting for AI analysis...</li></ul></div>
+                <div class="button-row"><button class="primary-btn" style="background-color: #1565C0;" onclick="downloadPDF('soil')"><i class="fa-solid fa-file-pdf"></i> Download PDF Report</button></div>
+            </div>
+        </section>
+        <section id="fasal-guru" class="tab-content chat-wallpaper">
+            <div class="global-branding"><h1 class="brand-title-left">Fasal Vaani</h1><p class="brand-tagline-left">Empowering farmers through early disease detection & soil intelligence.</p></div>
+            <header class="page-header" style="text-align: left; margin-left: 5%;"><h2 class="page-title">Fasal Guru</h2><p class="page-subtitle">Your AI farming assistant. Ask any question via text or voice.</p></header>
+            <div class="chat-container"><div class="chat-history" id="chat-history"><div class="chat-bubble ai-bubble"><strong>Fasal Guru:</strong><br>Namaste! I am your AI farming assistant. How can I help you improve your crop yield today?</div></div><div class="chat-input-area"><input type="text" id="chat-input" placeholder="Ask Fasal Guru (e.g., sarso ki kheti kaise kare?)..."><button class="voice-btn" title="Voice Search"><i class="fa-solid fa-microphone"></i></button><button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button></div></div>
+        </section>
+
+        <section id="account" class="tab-content" style="background:#F4F7F4; min-height:100vh;">
+            <div class="global-branding"><h1 class="brand-title-left" style="color:#3A7342;">Fasal Vaani</h1></div>
+            <header class="page-header" style="max-width:650px;margin:0 auto 20px auto;text-align:left;">
+                <h2 class="page-title" style="color:#1A1A1A;">Account Info</h2>
+                <p class="page-subtitle" style="color:#555;">Your registered farmer profile</p>
+            </header>
+            <div class="account-card">
+                <div style="text-align:center;border-bottom:1px solid #eee;padding-bottom:18px;margin-bottom:18px;">
+                    <div style="width:75px;height:75px;background:#E8F5E9;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:36px;">👨‍🌾</div>
+                    <h3 id="acc-display-name" style="margin-top:12px;color:#2E5E36;">Loading...</h3>
+                    <p id="acc-uid" style="font-size:9px;color:#999;word-break:break-all;margin-top:6px;"></p>
+                </div>
+                <div class="info-box">
+                    <b>Username:</b> <span id="acc-username">-</span><br>
+                    <b>User ID:</b> <span id="acc-uid2" style="font-size:11px;color:#666;">-</span><br>
+                    <b>Email (internal):</b> <span id="acc-email" style="font-size:11px;">-</span><br>
+                    <span style="color:#888;">Password is hidden for security</span>
+                </div>
+                <label>Full Name</label>
+                <input id="fullName" type="text" placeholder="Enter your full name">
+                <label style="margin-top:15px;display:block;font-weight:500;font-size:13px;">State</label>
+                <select id="state"><option value="">Select State</option><option>West Bengal</option><option>Bihar</option><option>Uttar Pradesh</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Punjab</option><option>Haryana</option><option>Rajasthan</option><option>Gujarat</option><option>Andhra Pradesh</option><option>Karnataka</option><option>Tamil Nadu</option><option>Kerala</option><option>Assam</option><option>Odisha</option><option>Delhi</option><option>Other</option></select>
+                <label style="margin-top:15px;display:block;font-weight:500;font-size:13px;">City / Village</label>
+                <input id="city" type="text" placeholder="e.g. Jalpaiguri">
+                <button onclick="saveProfile()" class="primary-btn full-width" style="margin-top:22px;padding:12px;">Save My Information</button>
+                <p id="profile-status" style="text-align:center;margin-top:10px;font-size:13px;color:#2E7D32;font-weight:600;"></p>
+                <div style="margin-top:25px;border-top:1px solid #eee;padding-top:18px;">
+                    <label style="font-weight:600;font-size:13px;">Change Password</label>
+                    <div style="display:flex;gap:8px;margin-top:6px;">
+                        <input id="new-password" type="password" placeholder="New password min 6 chars">
+                        <button onclick="changePassword()" style="padding:0 16px;background:#333;color:white;border:none;border-radius:8px;cursor:pointer;">Update</button>
+                    </div>
+                </div>
+                <button onclick="logout()" style="width:100%;margin-top:25px;padding:12px;background:#C62828;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:600;">Logout</button>
+            </div>
+        </section>
+
+        <!-- DESIGNER ABOUT ME - NEW -->
+        <section id="about" class="tab-content">
+            <div class="about-wrapper">
+                <!-- LEFT SIDE - TEXT -->
+                <div class="about-left">
+                    <span class="about-badge">✨ SIH 2026 Project</span>
+                    <h1>About Me</h1>
+                    <p style="font-size:16px;font-weight:500;color:#2E5E36;">Hey, I'm Anurag Sharma 👋</p>
+                    <p>A Computer Science & Engineering student at <b>Camellia Institute of Technology and Management</b>. I'm passionate about using AI to solve real-world problems in agriculture.</p>
+                    <p>This website is a <b>trail version</b> of one of my projects - <b>Fasal Guru</b>. Hope you like it!</p>
+                    
+                    <div class="connect-box">
+                        <a href="https://www.linkedin.com/in/anuragsharma260701/" target="_blank" class="connect-link linkedin"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                        <a href="https://github.com/anuraag-me" target="_blank" class="connect-link github"><i class="fa-brands fa-github"></i> GitHub</a>
+                        <a href="mailto:anuragsharma260701@gmail.com" class="connect-link gmail"><i class="fa-solid fa-envelope"></i> Gmail</a>
+                    </div>
+
+                    <h2>About The Project - Fasal Guru / Fasal Vaani</h2>
+                    <p><b>Built for SIH 2026</b><br>Topic: Early Detection and Management of Crop Diseases and Pest Infestations</p>
+                    
+                    <div class="feature-card" style="border-left-color:#C62828;background:#FFF8F8;">
+                        <h4><i class="fa-solid fa-triangle-exclamation" style="color:#C62828;"></i> Problem Statement</h4>
+                        <p>Farmers in India lose 20-30% of their yield every year due to late detection of crop diseases and pest attacks. They lack access to instant, expert advice in their own language, leading to wrong pesticide use, increased cost, and poor soil health. There is a need for a single, simple, AI-powered tool that can diagnose problems early and guide them with actionable solutions.</p>
+                    </div>
+
+                    <h2>How Fasal Vaani Helps</h2>
+                    <p>Fasal Vaani is an AI-powered farming assistant designed to be a 24/7 guru for every farmer. It has 3 core features:</p>
+
+                    <div class="feature-card">
+                        <h4>1. Leaf Analyzer 🌿</h4>
+                        <p>Just upload a photo of the affected crop leaf. Our AI detects the disease/pest instantly, identifies its severity, and provides step-by-step treatment and prevention tips.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>2. Soil Analyzer 🌱</h4>
+                        <p>Analyzes soil health parameters and suggests what your soil needs. Get personalized recommendations to improve fertility and cure deficiencies before it affects your crop.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>3. AI Chat Bot - Fasal Guru 🤖</h4>
+                        <p>A real-time farming expert in your pocket. Chat with our AI about any farming doubt - from weather to mandi prices to organic farming.</p>
+                    </div>
+
+                    <div class="feature-card" style="border-left-color:#1565C0;background:#F3F8FF;">
+                        <h4><i class="fa-solid fa-language" style="color:#1565C0;"></i> Language Independent</h4>
+                        <p>Works seamlessly in 3 languages - <b>English, Hindi, and Bengali</b> - so every farmer can get help in the language they are most comfortable with.</p>
+                    </div>
+
+                    <p style="margin-top:25px;font-size:12px;color:#888;text-align:center;">Made with ❤️ for Indian Farmers | SIH 2026</p>
+                </div>
+
+                <!-- RIGHT SIDE - PHOTO IN ROUNDISH CORNER SHAPE -->
+                <div class="about-photo-wrap">
+                    <div class="photo-blob"></div>
+                    <img src="Images/anurag_photo.jpg" alt="Anurag Sharma" class="about-photo" onerror="this.src='anurag_photo.jpeg'">
+                    <div style="position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);z-index:2;background:white;padding:10px 18px;border-radius:30px;box-shadow:0 8px 20px rgba(0,0,0,0.12);display:flex;align-items:center;gap:8px;white-space:nowrap;">
+                        <span style="width:10px;height:10px;background:#4CAF50;border-radius:50%;display:inline-block;"></span>
+                        <span style="font-size:12px;font-weight:600;color:#2E5E36;">Available for Projects</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="pdf-container" style="display:none;">
+        <div id="pdf-template" style="padding: 40px; font-family: 'Poppins', sans-serif; color: #333; background: #FFF;">
+            <div style="text-align: center; border-bottom: 3px solid #3A7342; padding-bottom: 20px; margin-bottom: 30px;"><h1 style="color: #3A7342; font-family: 'Cinzel', serif; font-size: 36px; margin-bottom: 5px;">FASAL VAANI</h1><h2 style="font-family: 'Playfair Display', serif; color: #555; margin: 0; font-size: 22px;">Official AI Diagnostic Report</h2></div>
+            <table style="width: 100%; margin-bottom: 30px; font-size: 16px;"><tr><td style="padding: 10px 0; border-bottom: 1px solid #EEE;"><strong>Report Date:</strong> <span id="pdf-date"></span></td><td style="padding: 10px 0; border-bottom: 1px solid #EEE; text-align: right;"><strong>Target Crop:</strong> <span id="pdf-crop" style="color: #3A7342; font-weight: 600;"></span></td></tr></table>
+            <h3 style="color: #C62828; margin-bottom: 15px; border-left: 4px solid #C62828; padding-left: 10px; font-size: 20px;">Identified Problems & Diagnosis</h3><div id="pdf-problem" style="background: #FFEBEE; padding: 20px; border-radius: 8px; margin-bottom: 30px; line-height: 1.8; font-size: 15px;"></div>
+            <h3 style="color: #2E7D32; margin-bottom: 15px; border-left: 4px solid #2E7D32; padding-left: 10px; font-size: 20px;">Prescribed Cures & Management</h3><div id="pdf-cure" style="background: #E8F5E9; padding: 20px; border-radius: 8px; line-height: 1.8; font-size: 15px;"></div>
+            <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #EEE; padding-top: 20px;"><p>Generated automatically by Fasal Vaani AI Assistant. For further assistance, visit Fasal Guru.</p></div>
+        </div>
+    </div>
+    <script type="text/javascript">function googleTranslateElementInit() {new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,hi,bn', autoDisplay: false}, 'google_translate_element');}</script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="script.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHq1eFf1nIPqqePf-tlzRcxJh_K7hCUIc",
+            authDomain: "fasal-vaani.firebaseapp.com",
+            projectId: "fasal-vaani",
+            storageBucket: "fasal-vaani.firebasestorage.app",
+            messagingSenderId: "748246521246",
+            appId: "1:748246521246:web:3a26da8a6bdfd84c68f28f"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const originalSwitchTab = window.switchTab;
+        window.switchTab = (id) => {
+            document.querySelectorAll('.tab-content').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(id);
+            if(target) target.classList.add('active');
+            document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
+            if(window.event && window.event.currentTarget) window.event.currentTarget.classList.add('active');
+            if(typeof originalSwitchTab === 'function' && originalSwitchTab !== window.switchTab) {
+                try{ originalSwitchTab(id); }catch(e){}
+            }
+        };
+        onAuthStateChanged(auth, async (user) => {
+            if(!user){ window.location.href = "login.html"; return; }
+            const uname = user.email.split('@')[0];
+            const uid = user.uid;
+            const set = (id,val) => { const el=document.getElementById(id); if(el) el.innerText=val; };
+            set('acc-username', uname);
+            set('acc-display-name', uname);
+            set('acc-email', user.email);
+            set('acc-uid', uid);
+            set('acc-uid2', uid);
+            try{
+                const snap = await getDoc(doc(db, "farmers", uid));
+                if(snap.exists()){
+                    const d = snap.data();
+                    const g = (id,v)=>{ const el=document.getElementById(id); if(el) el.value=v||""; };
+                    g('fullName', d.fullName); g('state', d.state); g('city', d.city);
+                }
+            }catch(e){ console.error(e); }
+        });
+        window.saveProfile = async () => {
+            const user = auth.currentUser;
+            if(!user) return;
+            const btn = document.getElementById('profile-status');
+            btn.innerText = "Saving...";
+            try{
+                await setDoc(doc(db, "farmers", user.uid), {
+                    username: user.email.split('@')[0],
+                    fullName: document.getElementById('fullName').value.trim(),
+                    state: document.getElementById('state').value,
+                    city: document.getElementById('city').value.trim(),
+                    updatedAt: new Date()
+                }, { merge: true });
+                btn.innerText = "✓ Saved! Will show every time you login.";
+                btn.style.color = "green";
+            }catch(e){ btn.innerText = "Save failed: " + e.message; btn.style.color = "red"; }
+        };
+        window.changePassword = async () => {
+            const np = document.getElementById('new-password').value;
+            if(np.length < 6){ alert("Password min 6 chars"); return; }
+            try{ await updatePassword(auth.currentUser, np); alert("Password updated"); document.getElementById('new-password').value=""; }
+            catch(e){ alert("Please logout and login again, then change password"); }
+        };
+        window.logout = () => signOut(auth).then(()=> window.location.href="login.html");
+    </script>
+</body>
+</html>
